@@ -15,11 +15,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_213252) do
   enable_extension "plpgsql"
 
   create_table "merchants", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "cif"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "cif", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cif"], name: "index_merchants_on_cif", unique: true
+    t.index ["email"], name: "index_merchants_on_email", unique: true
   end
 
 end
