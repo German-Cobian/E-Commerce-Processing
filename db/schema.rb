@@ -25,11 +25,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_14_220205) do
   end
 
   create_table "shoppers", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "nif"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "nif", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_shoppers_on_email", unique: true
+    t.index ["nif"], name: "index_shoppers_on_nif", unique: true
   end
 
 end
