@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_15_022106) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_15_023234) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,10 +25,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_15_022106) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal "amount"
+    t.decimal "amount", null: false
     t.datetime "completed_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "merchant_id", null: false
+    t.bigint "shopper_id"
+    t.index ["merchant_id"], name: "index_orders_on_merchant_id"
+    t.index ["shopper_id"], name: "index_orders_on_shopper_id"
   end
 
   create_table "shoppers", force: :cascade do |t|
@@ -41,4 +45,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_15_022106) do
     t.index ["nif"], name: "index_shoppers_on_nif", unique: true
   end
 
+  add_foreign_key "orders", "merchants"
+  add_foreign_key "orders", "shoppers"
 end
