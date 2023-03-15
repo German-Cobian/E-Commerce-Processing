@@ -10,16 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_15_033922) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_15_040411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "disbursements", force: :cascade do |t|
-    t.decimal "amount"
-    t.integer "week"
-    t.integer "year"
+    t.decimal "amount", default: "0.0", null: false
+    t.integer "week", null: false
+    t.integer "year", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "merchant_id", null: false
+    t.index ["merchant_id", "year", "week"], name: "index_disbursements_on_merchant_id_and_year_and_week", unique: true
+    t.index ["merchant_id"], name: "index_disbursements_on_merchant_id"
   end
 
   create_table "merchants", force: :cascade do |t|
@@ -39,6 +42,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_15_033922) do
     t.datetime "updated_at", null: false
     t.bigint "merchant_id", null: false
     t.bigint "shopper_id"
+    t.bigint "disbursement_id"
+    t.index ["disbursement_id"], name: "index_orders_on_disbursement_id"
     t.index ["merchant_id"], name: "index_orders_on_merchant_id"
     t.index ["shopper_id"], name: "index_orders_on_shopper_id"
   end
@@ -53,6 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_15_033922) do
     t.index ["nif"], name: "index_shoppers_on_nif", unique: true
   end
 
+  add_foreign_key "disbursements", "merchants"
   add_foreign_key "orders", "merchants"
   add_foreign_key "orders", "shoppers"
 end
